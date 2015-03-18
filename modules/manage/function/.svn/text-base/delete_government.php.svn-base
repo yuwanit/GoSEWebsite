@@ -1,0 +1,40 @@
+<?php
+if(empty($_SESSION['admin_id']))
+{
+	header('Location: '.PATH);
+}
+
+$_TEMFILE = 'main2';
+
+$strSQL_government = "SELECT g.coordinates_id, g.image
+				FROM government_offices g
+				WHERE g.government_id = '".$cRoute->Get('item2')."'";
+$result_government = $cDB->execute($strSQL_government);
+$objResult_government = $cDB->fetch_array($result_government);
+
+chown("uploads/pic_government", 666);
+
+$deleteFile = unlink('uploads/pic_government/'.$objResult_government['image'].'');
+
+echo $deleteFile;
+$strSQL_del_coordinates = "DELETE FROM coordinates WHERE coordinates_id ='".$objResult_government['coordinates_id']."'";
+$objQuery_del_coordinates = $cDB->execute($strSQL_del_coordinates);
+
+$strSQL_del_government = "DELETE FROM government_offices WHERE government_id = '".$cRoute->Get('item2')."'";
+$objQuery_del_government = $cDB->execute($strSQL_del_government);
+
+if($objQuery_del_coordinates&&$objQuery_del_government&&$deleteFile)
+{
+	$_SCP = '<script> alert("DELETE SUCCESS");
+				window.location.assign("'.PATH.'/menu.html#manage_government");
+			</script>';
+}
+else
+{
+	$_SCP = '<script>
+				alert("DELETE UNSUCCESS !!! '.$deleteFile.'" );
+				window.location.assign("'.PATH.'/menu.html#manage_government");
+			</script>';
+}
+
+?>

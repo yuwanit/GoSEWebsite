@@ -1,0 +1,23 @@
+<?php
+$search_category = '
+<div class="section section_with_padding" id="search_category">
+	<h1>Search category</h1>
+	<center>
+		<label>Category Name:</label>
+		<input name="txtCategoryName" id="txtCategoryName"
+			type="text" class="required input_field" maxlength="30" />
+
+		<input type="submit" class="submit_btn"
+			name="btnSearchCategory" id="btnSearchCategory" value="Search" />
+		<br/>
+		<br/>
+		<div id="contact_form">
+			<div>
+				<div id="view_search_category"></div>
+			</div>
+		</div>
+	</center>
+	<a href="#home" class="home_btn">home</a>
+	<a href="#search_government" class="page_nav_btn previous">Previous</a>
+</div>';
+?>

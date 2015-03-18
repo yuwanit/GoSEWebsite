@@ -1,0 +1,53 @@
+<?php
+$strSQL_ddlCategory = "SELECT * FROM categories";
+
+$result_ddlCategory = $cDB->execute($strSQL_ddlCategory);
+$html_ddlCategory = '';
+while($objResult_ddlCategory = $cDB->fetch_array($result_ddlCategory))
+{
+	$html_ddlCategory.= '<option value="'.$objResult_ddlCategory['category_id'].'">'.$objResult_ddlCategory['category_name'].'</option>';
+}
+
+$search_government = '
+<div class="section section_with_padding" id="search_government">
+	<h1>Search government</h1>
+	<div class="small_left">
+		<div id="contact_form">
+			<div>
+				<label>Government Name:</label> 
+				<input name="txtGovernmentName" id="txtGovernmentName"
+					type="text" class="required input_field" />
+			
+				<label>Head Agency:</label>
+				<input name="txtHeadAgency" id="txtHeadAgency"
+					type="text" class="required input_field" />
+				
+				<label>Keyword Search:</label>
+				<input name="txtKeywordSearch" id="txtKeywordSearch"
+					type="text" class="required input_field" />
+				
+				<label>Category:</label> 
+				<select name="ddlCategory" id="ddlCategory">
+					<option value="" selected> - - Select Category - - </option>
+					' . $html_ddlCategory . '
+				</select>
+				
+				<br/><br/>
+				<input type="button" class="submit_btn float_l"
+					name="btnSearchGovernment" id="btnSearchGovernment" value="Search" />
+			</div>
+		</div>
+	</div>
+
+	<div class="lage_right">
+		<div id="contact_form">
+			<div>
+				<div id="view_search_government"></div>
+			</div>
+		</div>
+	</div>
+	<a href="#home" class="home_btn">home</a>
+	<a href="#manage_category" class="page_nav_btn previous">Previous</a>
+	<a href="#search_category" class="page_nav_btn next">Next</a>
+</div>';
+?>

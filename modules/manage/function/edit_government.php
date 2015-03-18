@@ -1,0 +1,185 @@
+<?php
+if(empty($_SESSION['admin_id']))
+{
+	header('Location: '.PATH);
+}
+
+$_TEMFILE = 'main2';
+
+$strSQL_edit_government = "SELECT DISTINCT *
+				FROM (government_offices g LEFT JOIN coordinates co ON g.coordinates_id = co.coordinates_id)
+					LEFT JOIN categories ca ON g.category_id = ca.category_id
+				WHERE g.government_id = '".$cRoute->Get('item2')."'";
+$result_edit_government = $cDB->execute($strSQL_edit_government);
+$objResult_edit_government = $cDB->fetch_array($result_edit_government);
+
+$strSQL_category = "SELECT * FROM categories";
+
+$result_category = $cDB->execute($strSQL_category);
+$html_category = '';
+
+while($objResult_category = $cDB->fetch_array($result_category))
+{
+	$selected = "";
+	if ( $objResult_category['category_id'] == $objResult_edit_government['category_id'] ) $selected = "selected";
+	$html_category.= '<option value="'.$objResult_category['category_id'].'" '.$selected.'>'.$objResult_category['category_name'].'</option>';
+}
+
+$_CONTENT = '
+<div id="templatemo_header">
+    <div id="site_title">
+		<a href="'.PATH.'/menu.html" rel="nofollow">GoSE</a>
+		<a href="'.PATH.'/index/logout.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img style="position:absolute; right:0px; z-index:999;" src="'.PATH.'/templates/templates1/images/icon/logout.png" /></a>
+    </div>
+</div>
+<div id="templatemo_main">
+	<form method="post" action="'.PATH.'/manage/update_government.html" id="form_edit_government"
+		enctype="multipart/form-data">
+		<div class="section_with_padding">
+			<h1>Edit Government Office</h1>
+			<div class="half left">
+				<div id="contact_form">
+					<div>
+						<input name="gmID" type="hidden" value="'.$cRoute->Get('item2').'" />
+				    	<input name="coordinates_id" type="hidden" value="'.$objResult_edit_government['coordinates_id'].'" />
+						<div class="left">
+							<label>Government Name: <span class="req">*</span></label>
+				    		<input name="txtGovernmentName" type="text" class="input_field" 
+				    			data-validetta="required" value="'.$objResult_edit_government['name'].'"/>
+						</div>
+						<div class="right">
+							<label>Head Agency: <span class="req">*</span></label> 
+				    		<input name="txtHeadAgency" type="text" class="input_field" 
+				    			data-validetta="required" value="'.$objResult_edit_government['head_agency'].'"/>
+						</div>
+						<div class="clear">
+							<label for="message">Location: <span class="req">*</span></label>
+							<textarea name="txtLocation" data-validetta="required">'.$objResult_edit_government['location'].'</textarea>
+						</div>
+						<div class="clear">
+							<div id="datetimepicker1" class="input-append">
+								<label>Offices hours start: <span class="req">*</span></label> 
+								<input data-format="hh:mm:ss" name="txtOffices_hours_start" type="text"
+									class="input_field" data-validetta="required" 
+									value="'.$objResult_edit_government['offices_hours_start'].'" readonly/>
+								<span class="add-on">
+									<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+							    </span>
+							</div>
+							<div id="datetimepicker2" class="input-append">
+								<label>Offices hours end: <span class="req">*</span></label>
+								<input data-format="hh:mm:ss" name="txtOffices_hours_end" type="text"
+									value="'.$objResult_edit_government['offices_hours_end'].'"
+									class="input_field" data-validetta="required" readonly/>
+								<span class="add-on">
+									<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+							    </span>
+							 </div>
+						</div>
+						<div class="left">
+							<label>Tel: <span class="req">*</span></label>
+							<input name="txtTel" type="text" data-validetta="required,minLength[9],maxLength[9]"
+								OnKeyPress="return checkNumber()"
+								class="input_field" value="'.$objResult_edit_government['tel'].'"/>
+						</div>
+						<div class="right">
+							<label>Fax:</label>
+							<input name="txtFax" type="text" class="input_field" OnKeyPress="return checkNumber()"
+								value="'.$objResult_edit_government['fax'].'"/>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+			<div class="half right">
+				<div id="contact_form">
+					<div>
+						<div class="clear">
+							<label>Keyword Search: <span class="req">*</span></label>
+							<textarea name="txtKeywordSearch" data-validetta="required">'.$objResult_edit_government['keyword_search'].'</textarea>
+						</div>
+						<div class="left">
+							<label>Latitude: <span class="req">*</span></label> 
+							<input name="txtLatitude" id="txtLatitude" type="text" data-validetta="required" class="input_field" 
+								OnKeyPress="return checkNumberAndDot(this)"
+								value="'.$objResult_edit_government['latitude'].'"/>
+						</div>
+						<div class="right">
+							<label>Longitude: <span class="req">*</span></label>
+							<input name="txtLongitude" id="txtLongitude" type="text" class="input_field" 
+								OnKeyPress="return checkNumberAndDot(this)"
+								data-validetta="required" value="'.$objResult_edit_government['longitude'].'"/>
+							<a id="linkMap" class="pointer">
+								<img src="'.PATH.'/templates/templates1/images/maps.png" />
+							</a>
+						</div>
+						<div class="clear">
+							<label>Category: <span class="req">*</span></label>
+							<select name="ddlCategory" data-validetta="required">
+								<option value="" selected>- - - - - Please Select Category - - -
+									- -</option> 
+								' . $html_category . '
+							</select>
+							<br/><br/>			
+							<label>Government image: <span class="req">*</span></label>
+							<input type="file" name="file"/>
+							<br/>
+							<a href="'.PATH.'/uploads/pic_government/'.$objResult_edit_government['image'].'" title="'.$objResult_edit_government['name'].'" rel="lightbox[home]">
+								<img width="60px" src="'.PATH.'/uploads/pic_government/'.$objResult_edit_government['image'].'"/>
+							</a>
+						</div>
+						<div class="left">
+							<label>&nbsp;</label>
+							<input type="reset" class="submit_btn float_l" name="buttonReset" 
+								id="submit" value="Reset" />
+							<input type="submit" class="submit_btn float_l"
+								name="buttonConfrim" id="submit" value="Confirm" />
+						</div>
+					</div>
+				</div>
+				<a href="'.PATH.'/menu.html" class="home_btn">home</a>
+			</div>
+		</div>
+	</form>
+</div>';
+
+$_SCP = '
+<link href="'.PATH.'/templates/templates1/css/bootstrap-datetimepicker.min.css" type="text/css" rel="stylesheet" />
+<link href="'.PATH.'/templates/templates1/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="'.PATH.'/templates/templates1/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="'.PATH.'/templates/templates1/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+	$(function() {
+	    $("#datetimepicker1").datetimepicker({
+	      pickDate: false
+	    });
+	
+		$("#datetimepicker2").datetimepicker({
+	      pickDate: false
+	    });
+		
+		$("#linkMap").click(function() {
+			if(document.getElementById("txtLatitude").value=="" || document.getElementById("txtLongitude").value==""){
+				alert("Please enter Latitude and Longitude.");
+			}else{
+		         window.open("'.PATH.'/map/"+document.getElementById("txtLatitude").value+"/"+document.getElementById("txtLongitude").value+".html","_blank","location=yes,height=600,width=900,scrollbars=yes,status=yes") ;
+			}
+		});
+
+		$("#form_edit_government").validetta({
+		customReg : {
+			regname : {
+				method : /^[\+][0-9]+?$|^[0-9]+?$/,
+				errorMessage : "Custom Reg Error Message !"
+			},
+            // you can add more
+			example : { 
+				method : /^[\+][0-9]+?$|^[0-9]+?$/,
+				errorMessage : "Lan mal !"
+			}
+		},
+        realTime : true
+		});
+	});
+</script>';
+?>

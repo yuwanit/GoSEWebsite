@@ -1,0 +1,13 @@
+<?php 
+class FunctionDb
+{
+	private $cDB;
+	private $cTime;
+	
+	public function __construct()
+    {
+    	$this->cDB = new db();
+    	$this->cTime = new DateTimeCore();
+    }
+}
+?>

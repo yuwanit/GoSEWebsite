@@ -1,0 +1,94 @@
+<?php
+if(empty($_SESSION['admin_id']))
+{
+	header('Location: '.PATH);
+}
+
+$_TEMFILE = 'main2';
+
+$strSQL_edit_category = "SELECT *
+				FROM categories c
+				WHERE c.category_id = '".$cRoute->Get('item2')."'";
+$result_edit_category = $cDB->execute($strSQL_edit_category);
+$objResult_edit_category = $cDB->fetch_array($result_edit_category);
+
+$_CONTENT = '
+<div id="templatemo_header">
+    <div id="site_title">
+		<a href="#home" rel="nofollow">GoSE</a>
+		<a href="'.PATH.'/index/logout.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img height="30px" src="'.PATH.'/templates/templates1/images/icon/logout.png" /></a>
+    </div>
+</div>
+<div id="templatemo_main">
+	<div id="content"> 
+		<form method="post" action="'.PATH.'/manage/update_category.html"
+			enctype="multipart/form-data" id="form_edit_category">
+			<div class="section_with_padding" id="edit_category">
+				<h1>Edit Category</h1>
+				<div class="half left">
+					<div id="contact_form">
+						<div>
+						<input type="hidden" name="catID" value="'.$cRoute->Get('item2').'" />
+							<div class="clear">
+								<label>Category Name: <span class="req">*</span></label> 
+								<input name="txtCategoryName" type="text" class="input_field" 
+									data-validetta="required" value="'.$objResult_edit_category['category_name'].'"/> 
+								
+								<label>Definition:</label>
+								<textarea name="txtDefinition">'.$objResult_edit_category['definition'].'</textarea>
+		
+								<label>Category image: <span class="req">*</span></label> 
+								<input type="file" name="file" />
+								<br/>
+								<a href="'.PATH.'/uploads/pic_categories/'.$objResult_edit_category['category_image'].'" title="'.$objResult_edit_category['category_name'].'" rel="lightbox[home]">
+									<img width="60px" src="'.PATH.'/uploads/pic_categories/'.$objResult_edit_category['category_image'].'">
+								</a>
+								<label>&nbsp;</label>
+								<input type="reset" class="submit_btn float_l" name="buttonReset"
+									id="submit" value="Reset" /> <input type="submit"
+									class="submit_btn float_l" name="buttonConfrim" id="submit"
+									value="Confirm" />
+							</div>
+						</div>
+					</div>
+					<a href="'.PATH.'/menu.html#home" class="home_btn">home</a>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+											
+<div id="templatemo_footer_wrapper">
+	<div id="templatemo_footer">
+    	<p>Copyright © 2014 PSU Design</p>
+    </div>
+</div>';
+
+$_SCP = '
+<script type="text/javascript">
+	$(function() {
+	    $("#form_edit_category").validetta({
+		customReg : {
+			regname : {
+				method : /^[\+][0-9]+?$|^[0-9]+?$/,
+				errorMessage : "Custom Reg Error Message !"
+			},
+            // you can add more
+			example : {
+				method : /^[\+][0-9]+?$|^[0-9]+?$/,
+				errorMessage : "Lan mal !"
+			}
+		},
+        realTime : true
+		});
+	});
+
+	function Checkbc(){
+		if(document.form_add_category.file.value==""){
+			alert("Please select category image");
+			document.form_add_category.file.focus();
+			return false;
+		}
+	}
+</script>';
+?>

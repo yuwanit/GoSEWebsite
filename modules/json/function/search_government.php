@@ -44,6 +44,7 @@ while ( $objResult = $cDB->fetch_array($objQuery) ) {
 			"category_name" => $objResult ['category_name'],
 			"latitude" => $objResult ['latitude'],
 			"category_image" => $objResult ['category_image'],
+			"website" => $objResult ['website'],
 			"thai_name" => $objResult ['thai_name'],
 			"thai_category_name" => $objResult ['thai_category_name'],
 			"thai_location" => $objResult ['thai_location'],

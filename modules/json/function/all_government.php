@@ -20,9 +20,11 @@ while ( $objResult = $cDB->fetch_array($objQuery) ) {
 			"latitude" => $objResult ['latitude'],
 			"longitude" => $objResult ['longitude'],
 			"category_name" => $objResult ['category_name'],
+			"website" => $objResult ['website'],
 			"thai_name" => $objResult ['thai_name'],
 			"thai_location" => $objResult ['thai_location'],
 			"thai_head_agency" => $objResult ['thai_head_agency']
+			
 	);
 }
 $json = json_encode ( array( GovernmentOffice => $json_data) );

@@ -7,11 +7,15 @@ if($_POST['category_id'] != 0){
 						LEFT JOIN categories ca ON g.category_id = ca.category_id
 				WHERE (keyword_search LIKE '%".$_POST['keyword_search']."%'
 				OR g.name LIKE '%".$_POST['keyword_search']."%'
+				OR g.thai_name LIKE '%".$_POST['keyword_search']."%'
 				OR g.location LIKE '%".$_POST['keyword_search']."%'
+				OR g.thai_location LIKE '%".$_POST['keyword_search']."%'
 				OR g.head_agency LIKE '%".$_POST['keyword_search']."%'
+				OR g.thai_head_agency LIKE '%".$_POST['keyword_search']."%'
 				OR g.tel LIKE '%".$_POST['keyword_search']."%'
 				OR g.fax LIKE '%".$_POST['keyword_search']."%'
-				OR ca.category_name LIKE '%".$_POST['keyword_search']."%')
+				OR ca.category_name LIKE '%".$_POST['keyword_search']."%'
+				OR ca.thai_category_name LIKE '%".$_POST['keyword_search']."%')
 				AND ca.category_id = '".$_POST['category_id']."'";
 }else{
 	$strSQL = "SELECT *
@@ -19,11 +23,15 @@ if($_POST['category_id'] != 0){
 						LEFT JOIN categories ca ON g.category_id = ca.category_id
 				WHERE keyword_search LIKE '%".$_POST['keyword_search']."%'
 				OR g.name LIKE '%".$_POST['keyword_search']."%'
+				OR g.thai_name LIKE '%".$_POST['keyword_search']."%'
 				OR g.location LIKE '%".$_POST['keyword_search']."%'
+				OR g.thai_location LIKE '%".$_POST['keyword_search']."%'
 				OR g.head_agency LIKE '%".$_POST['keyword_search']."%'
+				OR g.thai_head_agency LIKE '%".$_POST['keyword_search']."%'
 				OR g.tel LIKE '%".$_POST['keyword_search']."%'
 				OR g.fax LIKE '%".$_POST['keyword_search']."%'
-				OR ca.category_name LIKE '%".$_POST['keyword_search']."%'";
+				OR ca.category_name LIKE '%".$_POST['keyword_search']."%'
+				OR ca.thai_category_name LIKE '%".$_POST['keyword_search']."%'";
 }
 
 $objQuery = $cDB->execute($strSQL);

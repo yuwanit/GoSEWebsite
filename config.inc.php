@@ -9,7 +9,7 @@ class Conf
 
     public function __construct()
     {
-        $this->host = 'localhost';
+        $this->host = 'localhost:3306';
         $this->db = 'u776773598_gose';
         $this->user = 'root';
         $this->pass = 'root';
